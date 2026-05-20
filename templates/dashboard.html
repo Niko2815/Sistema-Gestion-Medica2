@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Panel de Control{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12 mb-4 text-center">
+        <h1 class="fw-bold">Panel de Control</h1>
+        <p class="text-muted">Bienvenido al sistema. Selecciona una opción desde el menú.</p>
+    </div>
+    <div class="col-md-6 mb-4">
+        <div class="login-card h-100 p-4">
+            <h3>Mis citas</h3>
+            <p class="text-muted">Revisa tus citas recientes y pendientes.</p>
+            <a href="/appointment/api/appointments" class="btn btn-primary mt-3">Ver citas</a>
+        </div>
+    </div>
+    <div class="col-md-6 mb-4">
+        <div class="login-card h-100 p-4">
+            <h3>Mi perfil</h3>
+            <p class="text-muted">Actualiza tu información o revisa tu rol.</p>
+            <a href="/paciente/inicio" class="btn btn-secondary mt-3">Ir al inicio</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+{% block title %}Reservar Cita{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-4">
+    <div class="col-lg-8">
+        <div class="card p-4 bg-dark text-light">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h1 class="fw-bold">Reservar Cita</h1>
+                    <p class="text-muted">Elige especialidad, médico y horario para tu cita.</p>
+                </div>
+                <a href="{{ url_for('paciente.citas') }}" class="btn btn-secondary btn-sm">Mis Citas</a>
+            </div>
+
+            <div class="row g-3 mb-4">
+                <div class="col-md-6">
+                    <label class="form-label">Especialidad</label>
+                    <select id="especialidadSelect" class="form-select"></select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Médico</label>
+                    <select id="medicoSelect" class="form-select"></select>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <h5 class="mb-3">Horarios disponibles</h5>
+                <div id="horariosList" class="list-group"></div>
+            </div>
+
+            <form id="formReserva" class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Fecha</label>
+                    <input type="date" id="fecha" class="form-control" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Hora</label>
+                    <input type="time" id="hora" class="form-control" required>
+                </div>
+                <div class="col-12 text-end">
+                    <button type="submit" class="btn btn-primary">Reservar cita</button>
+                </div>
+            </form>
+
+            <div id="mensajeReserva" class="mt-3 d-none p-3 rounded" style="background: #15233f; color: #e2e8f0;"></div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+let horariosDisponibles = [];
+
+async function cargarEspecialidades() {
+    try {
+        const res = await fetch('/paciente/api/especialidades');
+        const data = await res.json();
+        const select = document.getElementById('especialidadSelect');
+        select.innerHTML = data.map(e => `<option value="${e.especialidad}">${e.especialidad}</option>`).join('');
+        if (data.length) cargarMedicos(data[0].especialidad);
+    } catch (error) {
+        console.error('Error cargando especialidades', error);
+    }
+}
+
+async function cargarMedicos(especialidad) {
+    try {
+        const res = await fetch(`/paciente/api/medicos?especialidad=${encodeURIComponent(especialidad)}`);
+        const data = await res.json();
+        const select = document.getElementById('medicoSelect');
+        select.innerHTML = data.map(m => `<option value="${m.id}">${m.nombre} (${m.correo})</option>`).join('');
+        if (data.length) cargarHorarios(data[0].id);
+        else document.getElementById('horariosList').innerHTML = '<div class="text-light">No hay médicos disponibles.</div>';
+    } catch (error) {
+        console.error('Error cargando médicos', error);
+    }
+}
+
+async function cargarHorarios(medicoId) {
+    try {
+        const res = await fetch(`/paciente/api/horarios?medico_id=${medicoId}`);
+        const data = await res.json();
+        horariosDisponibles = data;
+        const submitButton = document.querySelector('#formReserva button[type="submit"]');
+        if (!data.length) {
+            document.getElementById('horariosList').innerHTML = '<div class="text-light">El médico no está disponible.</div>';
+            if (submitButton) submitButton.disabled = true;
+            return;
+        }
+        document.getElementById('horariosList').innerHTML = data.map(h => `<div class="list-group-item bg-secondary text-light">${h.dia_semana}: ${h.hora_inicio} - ${h.hora_fin}</div>`).join('');
+        if (submitButton) submitButton.disabled = false;
+    } catch (error) {
+        console.error('Error cargando horarios', error);
+    }
+}
+
+function horaEnRango(hora, inicio, fin) {
+    return hora >= inicio && hora < fin;
+}
+
+function esHoraValida(hora) {
+    return horariosDisponibles.some(h => horaEnRango(hora, h.hora_inicio, h.hora_fin));
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    cargarEspecialidades();
+    document.getElementById('especialidadSelect').addEventListener('change', (e) => cargarMedicos(e.target.value));
+    document.getElementById('medicoSelect').addEventListener('change', (e) => cargarHorarios(e.target.value));
+    document.getElementById('formReserva').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const medicoId = document.getElementById('medicoSelect').value;
+        const fecha = document.getElementById('fecha').value;
+        const hora = document.getElementById('hora').value;
+        const mensaje = document.getElementById('mensajeReserva');
+
+        if (!horariosDisponibles.length) {
+            mensaje.classList.remove('d-none');
+            mensaje.textContent = 'El médico no está disponible en este momento.';
+            return;
+        }
+
+        if (!esHoraValida(hora)) {
+            mensaje.classList.remove('d-none');
+            mensaje.textContent = 'La hora seleccionada está fuera de la disponibilidad del médico.';
+            return;
+        }
+
+        try {
+            const res = await fetch('/appointment/api/appointments', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ medico_id: medicoId, fecha, hora })
+            });
+            const data = await res.json();
+            mensaje.classList.remove('d-none');
+            if (res.ok) {
+                mensaje.textContent = 'Cita reservada con éxito. Revisa tus citas.';
+                document.getElementById('formReserva').reset();
+            } else {
+                mensaje.textContent = data.error || 'No se pudo reservar la cita.';
+            }
+        } catch (error) {
+            mensaje.classList.remove('d-none');
+            mensaje.textContent = 'Error al conectar con el servidor.';
+        }
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}Nueva Cita{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-4">
+    <div class="col-lg-8">
+        <div class="card p-4 bg-dark text-light">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h1 class="fw-bold">Nueva Cita</h1>
+                    <p class="text-muted">Completa los datos para agendar una nueva consulta.</p>
+                </div>
+                <a href="/dashboard" class="btn btn-secondary btn-sm">Volver</a>
+            </div>
+
+            <form id="formNuevaCita" class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Paciente ID</label>
+                    <input type="number" id="paciente_id" class="form-control" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Médico ID</label>
+                    <input type="number" id="medico_id" class="form-control" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Fecha</label>
+                    <input type="date" id="fecha" class="form-control" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Hora</label>
+                    <input type="time" id="hora" class="form-control" required>
+                </div>
+                <div class="col-12 text-end">
+                    <button type="submit" class="btn btn-primary">Guardar cita</button>
+                </div>
+            </form>
+
+            <div id="mensajeCita" class="mt-3 d-none p-3 rounded" style="background: #15233f; color: #e2e8f0;"></div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.getElementById('formNuevaCita').addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const paciente_id = document.getElementById('paciente_id').value;
+    const medico_id = document.getElementById('medico_id').value;
+    const fecha = document.getElementById('fecha').value;
+    const hora = document.getElementById('hora').value;
+
+    try {
+        const res = await fetch('/appointment/api/appointments', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ paciente_id, medico_id, fecha, hora })
+        });
+        const data = await res.json();
+        const mensaje = document.getElementById('mensajeCita');
+        if (res.ok) {
+            mensaje.classList.remove('d-none');
+            mensaje.textContent = 'Cita creada con éxito. Puedes verla en Mis Citas.';
+            document.getElementById('formNuevaCita').reset();
+        } else {
+            mensaje.classList.remove('d-none');
+            mensaje.textContent = data.error || 'No se pudo crear la cita.';
+        }
+    } catch (e) {
+        console.error('Error al crear cita', e);
+    }
+});
+</script>
+{% endblock %}

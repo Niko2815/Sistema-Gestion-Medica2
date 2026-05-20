@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% block title %}Disponibilidad Médico{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-4">
+    <div class="col-lg-8">
+        <div class="card p-4 bg-dark text-light">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h1 class="fw-bold">Disponibilidad</h1>
+                    <p class="text-muted">Agrega y gestiona tus horarios disponibles.</p>
+                </div>
+                <a href="{{ url_for('dashboard') }}" class="btn btn-secondary btn-sm">Volver al panel</a>
+            </div>
+
+            <form id="formHorario" class="row g-3 mb-4">
+                <div class="col-md-4">
+                    <label class="form-label">Día de la semana</label>
+                    <input type="text" id="dia_semana" class="form-control" placeholder="Lunes" required>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Hora inicio</label>
+                    <input type="time" id="hora_inicio" class="form-control" required>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Hora fin</label>
+                    <input type="time" id="hora_fin" class="form-control" required>
+                </div>
+                <div class="col-12 text-end">
+                    <button type="submit" class="btn btn-primary">Agregar horario</button>
+                </div>
+            </form>
+
+            <div class="table-responsive">
+                <table class="table table-dark table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th>Día</th>
+                            <th>Inicio</th>
+                            <th>Fin</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaHorarios">
+                        <tr><td colspan="4" class="text-center py-4">Cargando horarios...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+async function cargarHorariosMedico() {
+    try {
+        const res = await fetch('/medico/api/horarios');
+        const data = await res.json();
+        const tbody = document.getElementById('tablaHorarios');
+        if (!data.length) {
+            tbody.innerHTML = '<tr><td colspan="4" class="text-center py-4 text-light">Aún no hay horarios definidos</td></tr>';
+            return;
+        }
+        tbody.innerHTML = data.map(h => `
+            <tr class="align-middle text-light">
+                <td>${h.dia_semana}</td>
+                <td>${h.hora_inicio}</td>
+                <td>${h.hora_fin}</td>
+                <td><button class="btn btn-outline-danger btn-sm" onclick="borrarHorario(${h.id})">Eliminar</button></td>
+            </tr>
+        `).join('');
+    } catch (e) {
+        console.error('Error cargando horarios', e);
+    }
+}
+
+async function borrarHorario(id) {
+    if (!confirm('¿Eliminar este horario?')) return;
+    try {
+        const res = await fetch(`/medico/api/horarios/${id}`, { method: 'DELETE' });
+        if (res.ok) cargarHorariosMedico();
+        else {
+            const data = await res.json();
+            alert(data.error || 'No se pudo eliminar el horario');
+        }
+    } catch (e) {
+        console.error('Error al eliminar horario', e);
+        alert('Error al eliminar horario');
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    cargarHorariosMedico();
+    document.getElementById('formHorario').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const dia_semana = document.getElementById('dia_semana').value;
+        const hora_inicio = document.getElementById('hora_inicio').value;
+        const hora_fin = document.getElementById('hora_fin').value;
+
+        try {
+            const res = await fetch('/medico/api/horarios', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ dia_semana, hora_inicio, hora_fin })
+            });
+            if (res.ok) {
+                document.getElementById('formHorario').reset();
+                cargarHorariosMedico();
+            } else {
+                const data = await res.json();
+                alert(data.error || 'No se pudo guardar el horario');
+            }
+        } catch (error) {
+            console.error('Error guardando horario', error);
+            alert('Error al guardar el horario');
+        }
+    });
+});
+</script>
+{% endblock %}

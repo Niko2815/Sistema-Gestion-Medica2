@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Mi Perfil{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-4">
+    <div class="col-12 mb-4 text-center">
+        <h1 class="fw-bold">Mi Perfil</h1>
+        <p class="text-muted">Actualiza tus datos personales y de contacto.</p>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="card p-4">
+            <div class="mb-3">
+                <label class="form-label">Nombre</label>
+                <input type="text" class="form-control" value="{{ current_user.nombre }}" readonly>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Correo electrónico</label>
+                <input type="email" class="form-control" value="{{ current_user.correo }}" readonly>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Rol</label>
+                <input type="text" class="form-control" value="{{ current_user.role | capitalize }}" readonly>
+            </div>
+            {% if detalle %}
+            <div class="mb-3">
+                <label class="form-label">Información adicional</label>
+                <textarea class="form-control" rows="4" readonly>{% if current_user.role == 'medico' %}Especialidad: {{ detalle.especialidad }}
+Teléfono: {{ detalle.telefono }}
+Dirección: {{ detalle.direccion }}{% elif current_user.role == 'paciente' %}Documento: {{ detalle.documento }}
+Teléfono: {{ detalle.telefono }}
+Dirección: {{ detalle.direccion }}{% endif %}</textarea>
+            </div>
+            {% endif %}
+            <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Volver al panel</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Inicio Paciente{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12 mb-4">
+        <h1 class="fw-bold">Bienvenido, paciente</h1>
+        <p class="text-muted">Selecciona una opción para gestionar tu atención.</p>
+    </div>
+
+    <div class="col-md-4 mb-4">
+        <div class="login-card h-100 text-center hover-effect">
+            <i data-lucide="calendar" class="text-primary mb-3 mx-auto" style="width: 48px; height: 48px;"></i>
+            <h3>Mis Citas</h3>
+            <p class="small text-muted">Revisa tus consultas programadas y gestiona tus reservas.</p>
+            <a href="{{ url_for('paciente.citas') }}" class="btn btn-outline-primary w-100 mt-2">Ver Citas</a>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-4">
+        <div class="login-card h-100 text-center hover-effect">
+            <i data-lucide="clipboard-list" class="text-success mb-3 mx-auto" style="width: 48px; height: 48px;"></i>
+            <h3>Reservar Médico</h3>
+            <p class="small text-muted">Elige especialidad y elige al médico disponible.</p>
+            <a href="{{ url_for('paciente.reservar') }}" class="btn btn-outline-success w-100 mt-2">Reservar Cita</a>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-4">
+        <div class="login-card h-100 text-center hover-effect">
+            <i data-lucide="user" class="text-info mb-3 mx-auto" style="width: 48px; height: 48px;"></i>
+            <h3>Mi Perfil</h3>
+            <p class="small text-muted">Actualiza tus datos y revisa tu información personal.</p>
+            <a href="{{ url_for('perfil') }}" class="btn btn-outline-info w-100 mt-2">Ver Perfil</a>
+        </div>
+    </div>
+</div>
+
+<style>
+.hover-effect { transition: transform 0.2s; cursor: pointer; }
+.hover-effect:hover { transform: translateY(-5px); border-color: var(--primary-blue); }
+</style>
+{% endblock %}
