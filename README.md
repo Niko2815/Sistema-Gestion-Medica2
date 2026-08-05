@@ -1,4 +1,4 @@
-# Sistema Hospitalario - Proyecto Desarrollo
+# Sistema Hospitalario - Proyecto Desarrollo (5to y 6to semestre)
 
 Proyecto Flask para gestión de citas médicas con roles: `admin`, `medico` y `paciente`.
 Incluye registro de pacientes, creación y edición de médicos desde el panel admin, validación de horarios, agenda de citas y notificaciones internas.
