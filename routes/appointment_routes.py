@@ -151,7 +151,11 @@ def actualizar_cita(appointment_id):
     if not cita:
         return jsonify({'error': 'Cita no encontrada'}), 404
 
-    if current_user.role not in ['admin', 'medico']:
+    if current_user.role == 'medico':
+        medico_usuario = Medico.query.filter_by(correo=current_user.correo).first()
+        if not medico_usuario or medico_usuario.id != cita.medico_id:
+            return jsonify({'error': 'No tiene permiso para modificar esta cita'}), 403
+    elif current_user.role != 'admin':
         paciente_usuario = Paciente.query.filter_by(correo=current_user.correo).first()
         if not paciente_usuario or paciente_usuario.id != cita.paciente_id:
             return jsonify({'error': 'No tiene permiso para modificar esta cita'}), 403
@@ -166,10 +170,11 @@ def actualizar_cita(appointment_id):
     antiguo_fecha = cita.fecha
     antiguo_hora = cita.hora
 
-    if data.get('medico_id') and int(data['medico_id']) != cita.medico_id:
-        cita.medico_id = int(data['medico_id'])
-        cambios.append('médico')
-        cambiado = True
+    if current_user.role == 'admin':
+        if data.get('medico_id') and int(data['medico_id']) != cita.medico_id:
+            cita.medico_id = int(data['medico_id'])
+            cambios.append('médico')
+            cambiado = True
     if data.get('fecha') and data['fecha'] != cita.fecha:
         cita.fecha = data['fecha']
         cambios.append('fecha')
@@ -179,6 +184,14 @@ def actualizar_cita(appointment_id):
         cambios.append('hora')
         cambiado = True
     if data.get('estado') and data['estado'] != cita.estado:
+        if current_user.role == 'medico':
+            if data['estado'] != 'Aceptada':
+                return jsonify({'error': 'El médico solo puede aceptar la cita'}), 403
+        elif current_user.role == 'admin':
+            if data['estado'] not in ['Pendiente', 'Aceptada', 'Confirmada', 'Cancelada']:
+                return jsonify({'error': 'Estado inválido'}), 400
+        else:
+            return jsonify({'error': 'No puede cambiar el estado de la cita'}), 403
         cita.estado = data['estado']
         cambios.append('estado')
         cambiado = True

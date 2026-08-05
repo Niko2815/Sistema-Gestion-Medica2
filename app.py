@@ -18,8 +18,8 @@ def create_app():
     @login_manager.user_loader
     def load_user(user_id):
         try:
-            from auth.user import User
-            return User.query.get(int(user_id))
+            from database.models.paciente import Paciente
+            return Paciente.query.get(int(user_id))
         except Exception:
             return None
 

@@ -58,12 +58,32 @@ async function cargarCitasMedico() {
                 <td>${c.hora}</td>
                 <td>${c.estado}</td>
                 <td>
+                    ${c.estado === 'Pendiente' ? `<button class="btn btn-outline-success btn-sm me-1" onclick="aceptarCita(${c.id})">Aceptar</button>` : ''}
                     <button class="btn btn-outline-danger btn-sm" onclick="cancelarCita(${c.id})">Cancelar</button>
                 </td>
             </tr>
         `).join('');
     } catch (e) {
         console.error('Error al cargar citas', e);
+    }
+}
+
+async function aceptarCita(id) {
+    try {
+        const res = await fetch(`/appointment/api/appointments/${id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ estado: 'Aceptada' })
+        });
+        const data = await res.json();
+        if (!res.ok) {
+            alert(data.error || 'No se pudo aceptar la cita');
+            return;
+        }
+        cargarCitasMedico();
+    } catch (e) {
+        console.error('Error aceptando cita', e);
+        alert('Error al aceptar cita');
     }
 }
 

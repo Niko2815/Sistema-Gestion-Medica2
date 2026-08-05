@@ -2,21 +2,21 @@ import os, sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 from app import create_app
 from extensions import db
-from auth.user import User
+from database.models.paciente import Paciente
 from database.models.medico import Medico
 
 app = create_app()
 with app.app_context():
-    # create a user role medico without Medico record
+    # create a paciente role medico without Medico record
     email = 'synccreate@hospital.com'
-    u = User.query.filter_by(correo=email).first()
-    if u:
+    p = Paciente.query.filter_by(correo=email).first()
+    if p:
         Medico.query.filter_by(correo=email).delete()
-        db.session.delete(u)
+        db.session.delete(p)
         db.session.commit()
-    u = User(nombre='Dr SyncCreate', correo=email, role='medico')
-    u.set_password('sync1234')
-    db.session.add(u)
+    p = Paciente(nombre='Dr SyncCreate', documento='1111111', correo=email, role='medico')
+    p.set_password('sync1234')
+    db.session.add(p)
     db.session.commit()
     client = app.test_client()
     resp = client.post('/auth/login', json={'email': 'admin@hospital.com', 'password': 'admin123'})

@@ -2,7 +2,7 @@ import os, sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 from app import create_app
 from extensions import db
-from auth.user import User
+from database.models.paciente import Paciente
 from database.models.medico import Medico
 
 app = create_app()

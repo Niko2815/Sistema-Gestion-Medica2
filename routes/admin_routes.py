@@ -1,6 +1,5 @@
 from flask import Blueprint, render_template, jsonify, request
 from flask_login import login_required, current_user
-from auth.user import User
 from database.models.cita import Cita
 from database.models.medico import Medico
 from database.models.paciente import Paciente
@@ -60,17 +59,17 @@ def sincronizar_medicos():
         return jsonify({'error': 'Acceso denegado'}), 403
 
     creados = []
-    for usuario in User.query.filter_by(role='medico').all():
-        medico_existente = Medico.query.filter_by(correo=usuario.correo).first()
+    for paciente in Paciente.query.filter_by(role='medico').all():
+        medico_existente = Medico.query.filter_by(correo=paciente.correo).first()
         if not medico_existente:
             medico_existente = Medico(
-                nombre=usuario.nombre or 'Dr. Sin Nombre',
+                nombre=paciente.nombre or 'Dr. Sin Nombre',
                 especialidad='General',
                 jornada='Diurna',
-                correo=usuario.correo
+                correo=paciente.correo
             )
             db.session.add(medico_existente)
-            creados.append(usuario.correo)
+            creados.append(paciente.correo)
     if creados:
         db.session.commit()
 
@@ -123,12 +122,12 @@ def crear_medico():
     if not nombre or not correo or not especialidad or not jornada or not password:
         return jsonify({'error': 'Faltan campos obligatorios para crear el médico'}), 400
 
-    if User.query.filter_by(correo=correo).first() or Medico.query.filter_by(correo=correo).first():
+    if Paciente.query.filter_by(correo=correo).first() or Medico.query.filter_by(correo=correo).first():
         return jsonify({'error': 'Correo ya registrado'}), 400
 
-    usuario = User(nombre=nombre, correo=correo, role='medico')
-    usuario.set_password(password)
-    db.session.add(usuario)
+    paciente = Paciente(nombre=nombre, correo=correo, documento=correo.split('@')[0], role='medico')
+    paciente.set_password(password)
+    db.session.add(paciente)
 
     medico = Medico(nombre=nombre, especialidad=especialidad, jornada=jornada, correo=correo)
     db.session.add(medico)

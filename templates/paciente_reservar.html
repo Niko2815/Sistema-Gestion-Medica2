@@ -97,7 +97,11 @@ async function cargarHorarios(medicoId) {
 }
 
 function horaEnRango(hora, inicio, fin) {
-    return hora >= inicio && hora < fin;
+    if (inicio <= fin) {
+        return hora >= inicio && hora < fin;
+    }
+    // Turno que cruza medianoche: por ejemplo 19:00 - 12:01
+    return hora >= inicio || hora < fin;
 }
 
 function esHoraValida(hora) {

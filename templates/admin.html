@@ -159,6 +159,7 @@
                     <label class="form-label">Estado</label>
                     <select id="estado" class="form-select">
                         <option value="Pendiente">Pendiente</option>
+                        <option value="Aceptada">Aceptada</option>
                         <option value="Confirmada">Confirmada</option>
                         <option value="Cancelada">Cancelada</option>
                     </select>
@@ -242,10 +243,11 @@ function render(datos) {
             <td class="text-light">${c.doctor_nombre}</td>
             <td class="text-light">${c.paciente_nombre}</td>
             <td class="text-light">${c.fecha}</td>
-            <td class="text-light">${c.horario}</td>
+            <td class="text-light">${c.hora}</td>
             <td><span class="badge ${c.estado === 'Confirmada' ? 'bg-success' : c.estado === 'Cancelada' ? 'bg-danger' : 'bg-primary'}">${c.estado}</span></td>
             <td>
                 <button class="btn btn-outline-info btn-sm me-1" onclick="editarCita(${c.id})">Editar</button>
+                ${c.estado === 'Aceptada' ? `<button class="btn btn-outline-success btn-sm me-1" onclick="validarCita(${c.id})">Validar</button>` : ''}
                 <button class="btn btn-outline-danger btn-sm" onclick="prepararBorrado(${c.id})">Eliminar</button>
             </td>
         </tr>
@@ -450,6 +452,25 @@ async function enviarFormulario(event) {
     } catch (e) {
         console.error('Error guardando cita', e);
         alert('Error al guardar la cita');
+    }
+}
+
+async function validarCita(id) {
+    try {
+        const res = await fetch(`/appointment/api/appointments/${id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ estado: 'Confirmada' })
+        });
+        const data = await res.json();
+        if (!res.ok) {
+            alert(data.error || 'No se pudo validar la cita');
+            return;
+        }
+        cargarCitas();
+    } catch (e) {
+        console.error('Error validando cita', e);
+        alert('Error al validar cita');
     }
 }
 
