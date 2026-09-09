@@ -3,7 +3,6 @@ from extensions import db
 from database.models.paciente import Paciente
 from database.models.medico import Medico
 
-
 app = create_app()
 
 
@@ -11,9 +10,10 @@ def crear_usuarios_prueba():
     with app.app_context():
         db.create_all()
 
-        if Paciente.query.count() > 0:
-            print("Los usuarios de prueba ya existen")
-            return
+        # Se recrean los usuarios de demo para dejar la base lista para validación
+        db.session.query(Paciente).delete()
+        db.session.query(Medico).delete()
+        db.session.commit()
 
         usuarios = [
             ('Administrador', 'admin@hospital.com', '1111111111', '3001234567', 'admin123', 'admin'),
@@ -22,17 +22,18 @@ def crear_usuarios_prueba():
         ]
 
         for nombre, correo, documento, telefono, pwd, role in usuarios:
-            p = Paciente(nombre=nombre, correo=correo, documento=documento, telefono=telefono, role=role)
-            p.set_password(pwd)
-            db.session.add(p)
-            
-            # Si es médico, crear también el registro en medicos
+            usuario = Paciente(nombre=nombre, correo=correo, documento=documento, telefono=telefono, role=role)
+            usuario.set_password(pwd)
+            db.session.add(usuario)
+
             if role == 'medico':
-                medico = Medico(nombre=nombre, especialidad='General', jornada='Diurna', correo=correo)
-                db.session.add(medico)
+                db.session.add(Medico(nombre=nombre, especialidad='General', jornada='Diurna', correo=correo))
 
         db.session.commit()
-        print("Usuarios de prueba creados exitosamente!")
+        print('Usuarios de prueba recreados exitosamente!')
+        print('Admin: admin@hospital.com / admin123')
+        print('Médico: doctor@hospital.com / doctor123')
+        print('Paciente: paciente@hospital.com / paciente123')
 
 
 if __name__ == '__main__':

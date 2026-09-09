@@ -41,11 +41,58 @@ def create_app():
             return {'notifications_count': count}
         return {}
 
+    def ensure_demo_users():
+        from auth.user import User
+        from database.models.medico import Medico
+        from database.models.paciente import Paciente
+
+        if User.query.first():
+            return
+
+        usuarios = [
+            ('Administrador', 'admin@hospital.com', 'admin123', 'admin'),
+            ('Dr. Carlos Mendez', 'doctor@hospital.com', 'doctor123', 'medico'),
+            ('María García', 'paciente@hospital.com', 'paciente123', 'paciente'),
+        ]
+
+        for nombre, correo, password, role in usuarios:
+            usuario = User(nombre=nombre, correo=correo, role=role)
+            usuario.set_password(password)
+            db.session.add(usuario)
+
+        db.session.commit()
+
+        for nombre, correo, password, role in usuarios:
+            if role == 'medico':
+                if not Medico.query.filter_by(correo=correo).first():
+                    db.session.add(Medico(
+                        nombre=nombre,
+                        especialidad='Medicina General',
+                        jornada='Diurna',
+                        correo=correo,
+                    ))
+            elif role == 'paciente':
+                if not Paciente.query.filter_by(correo=correo).first():
+                    db.session.add(Paciente(
+                        nombre=nombre,
+                        documento='12345678',
+                        telefono='3000000000',
+                        correo=correo,
+                    ))
+
+        db.session.commit()
+
     @app.route('/')
     def index():
         if current_user.is_authenticated:
             return redirect(url_for('dashboard'))
-        return render_template('login.html')
+        return render_template('lobby.html')
+
+    @app.route('/login')
+    def login_page():
+        if current_user.is_authenticated:
+            return redirect(url_for('dashboard'))
+        return redirect(url_for('auth.login'))
 
     @app.route('/register')
     def register():
@@ -110,9 +157,11 @@ def create_app():
         notis = Notificacion.query.filter_by(destinatario=current_user.correo).order_by(Notificacion.creado.desc()).all()
         return render_template('notificaciones.html', notificaciones=notis)
 
-    # Intentamos crear tablas si es posible, pero no romper la app si falla
+    # Inicializa tablas y datos mínimos del sistema para garantizar que funcione tal cual el README lo describe.
     try:
-        database.init_db(app)
+        with app.app_context():
+            database.init_db(app)
+            ensure_demo_users()
     except Exception as e:
         print(f"Advertencia: no se pudo inicializar la DB automáticamente: {e}")
 

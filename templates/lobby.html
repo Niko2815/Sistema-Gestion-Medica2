@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block title %}Bienvenido{% endblock %}
+
+{% block content %}
+<section class="hero-panel">
+    <div class="row align-items-center g-4">
+        <div class="col-lg-7">
+            <span class="eyebrow">Sistema de gestión médica</span>
+            <h1>Tu clínica, organizada y operando con claridad.</h1>
+            <p class="hero-copy">
+                Gestiona citas, especialistas, pacientes y horarios desde una sola plataforma.
+                Un entorno pensado para equipos médicos, administradores y usuarios con una experiencia simple, rápida y confiable.
+            </p>
+            <div class="hero-actions">
+                <a href="{{ url_for('auth.login') }}" class="btn btn-primary btn-lg">Iniciar sesión</a>
+                <a href="{{ url_for('auth.register') }}" class="btn btn-outline-light btn-lg">Crear cuenta</a>
+            </div>
+            <div class="hero-stats">
+                <div class="stat-card">
+                    <strong>3</strong>
+                    <span>Roles</span>
+                </div>
+                <div class="stat-card">
+                    <strong>24/7</strong>
+                    <span>Disponibilidad</span>
+                </div>
+                <div class="stat-card">
+                    <strong>100%</strong>
+                    <span>Control</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-5">
+            <div class="role-panel">
+                <div class="role-panel-header">
+                    <span class="dot dot-blue"></span>
+                    <span class="dot dot-green"></span>
+                    <span class="dot dot-amber"></span>
+                </div>
+
+                <div class="role-list">
+                    <div class="role-item active">
+                        <div class="role-icon"><i data-lucide="shield-check"></i></div>
+                        <div>
+                            <h4>Administrador</h4>
+                            <p>Control total de médicos, pacientes y agenda.</p>
+                        </div>
+                    </div>
+                    <div class="role-item">
+                        <div class="role-icon"><i data-lucide="stethoscope"></i></div>
+                        <div>
+                            <h4>Médico</h4>
+                            <p>Consulta citas, disponibilidad y atención.</p>
+                        </div>
+                    </div>
+                    <div class="role-item">
+                        <div class="role-icon"><i data-lucide="user-round"></i></div>
+                        <div>
+                            <h4>Paciente</h4>
+                            <p>Reserva citas y gestiona su historial.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="features-grid">
+    <div class="feature-card">
+        <div class="feature-icon"><i data-lucide="calendar-check"></i></div>
+        <h3>Agenda inteligente</h3>
+        <p>Organiza turnos para cada especialidad y valida disponibilidad antes de confirmar citas.</p>
+    </div>
+    <div class="feature-card">
+        <div class="feature-icon"><i data-lucide="users"></i></div>
+        <h3>Equipo visible</h3>
+        <p>Administra médicos, pacientes y relaciones de atención desde una interfaz clara.</p>
+    </div>
+    <div class="feature-card">
+        <div class="feature-icon"><i data-lucide="bell-ring"></i></div>
+        <h3>Alertas útiles</h3>
+        <p>Las notificaciones mantienen informado a cada usuario del estado de sus citas y recordatorios.</p>
+    </div>
+</section>
+{% endblock %}

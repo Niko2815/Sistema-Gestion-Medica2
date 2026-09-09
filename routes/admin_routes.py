@@ -166,6 +166,9 @@ def crear_medico():
 @admin_bp.route('/api/pacientes', methods=['GET'])
 @login_required
 def listar_pacientes():
+    if current_user.role != 'admin':
+        return jsonify({'error': 'Acceso denegado'}), 403
+
     pacientes = Paciente.query.order_by(Paciente.nombre).all()
     return jsonify([{
         'id': p.id,

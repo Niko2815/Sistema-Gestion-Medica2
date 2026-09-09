@@ -1,23 +1,44 @@
 {% extends "base.html" %}
-{% block title %}Historial Clínico{% endblock %}
+{% block title %}Historial clínico{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center mt-4">
-    <div class="col-12 mb-4 text-center">
-        <h1 class="fw-bold">Historial Clínico</h1>
-        <p class="text-muted">Consulta registros y notas médicas recientes.</p>
+<div class="page-header">
+    <div>
+        <span class="eyebrow">Historial</span>
+        <h1>Historial clínico</h1>
+        <p>Consulta registros, seguimiento y evolución de la atención.</p>
+    </div>
+    <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Volver</a>
+</div>
+
+<div class="panel-card">
+    <div class="panel-header">
+        <div>
+            <h3>Consultas recientes</h3>
+            <p>Historial del paciente registrado en el sistema.</p>
+        </div>
     </div>
 
-    <div class="col-lg-10">
-        <div class="card p-4">
-            <p class="mb-3">Aquí aparecerán las entradas del historial médico del paciente.</p>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item">Consulta 1: Diagnóstico inicial - 2026-05-15</li>
-                <li class="list-group-item">Consulta 2: Control de tratamiento - 2026-05-22</li>
-                <li class="list-group-item">Consulta 3: Revisión de exámenes - 2026-05-29</li>
-            </ul>
-            <div class="mt-3 text-end">
-                <a href="/dashboard" class="btn btn-secondary">Volver al panel</a>
+    <div class="timeline-list">
+        <div class="timeline-item">
+            <span class="timeline-date">15 mayo 2026</span>
+            <div>
+                <strong>Consulta inicial</strong>
+                <p>Evaluación inicial, diagnóstico preliminar y recomendaciones de seguimiento.</p>
+            </div>
+        </div>
+        <div class="timeline-item">
+            <span class="timeline-date">22 mayo 2026</span>
+            <div>
+                <strong>Control de tratamiento</strong>
+                <p>Revisión de evolución, ajustes de medicación y continuidad del plan terapéutico.</p>
+            </div>
+        </div>
+        <div class="timeline-item">
+            <span class="timeline-date">29 mayo 2026</span>
+            <div>
+                <strong>Revisión de exámenes</strong>
+                <p>Valoración de resultados y análisis clínico para la planificación de la próxima consulta.</p>
             </div>
         </div>
     </div>

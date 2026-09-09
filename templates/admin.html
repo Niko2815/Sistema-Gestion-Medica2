@@ -2,60 +2,88 @@
 {% block title %}Panel Administrativo{% endblock %}
 
 {% block content %}
-<div class="d-flex justify-content-between align-items-center mb-4">
+<div class="page-header">
     <div>
-        <h2 class="fw-bold">Panel Administrativo</h2>
-        <p class="text-muted mb-0">Gestiona citas, médicos y pacientes desde un solo lugar.</p>
+        <span class="eyebrow">Panel administrativo</span>
+        <h1>Control general de la clínica</h1>
+        <p>Gestiona citas, médicos y pacientes desde un único punto central.</p>
     </div>
-    <button class="btn btn-primary btn-sm" onclick="abrirModalCita()">Nueva Cita</button>
+    <button class="btn btn-primary" onclick="abrirModalCita()">
+        <i data-lucide="plus"></i>
+        Nueva cita
+    </button>
 </div>
 
-<div class="table-responsive bg-dark p-3 rounded shadow">
-    <table class="table table-dark table-hover mb-0">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Médico</th>
-                <th>Paciente</th>
-                <th>Fecha</th>
-                <th>Horario</th>
-                <th>Estado</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody id="tablaCitas">
-            <tr><td colspan="7" class="text-center py-4 text-light">Cargando citas...</td></tr>
-        </tbody>
-    </table>
-</div>
-
-<div class="d-flex justify-content-between align-items-center mt-5 mb-4">
-    <div>
-        <h3 class="fw-bold">Médicos registrados</h3>
-        <p class="text-muted mb-0">Crea y administra médicos con sus credenciales.</p>
+<div class="stats-row">
+    <div class="stat-box">
+        <span class="stat-label">Citas</span>
+        <strong id="totalCitas">0</strong>
     </div>
-    <div class="d-flex gap-2">
-        <button class="btn btn-success btn-sm" onclick="abrirModalMedico()">Nuevo Médico</button>
-        <button class="btn btn-outline-light btn-sm" onclick="sincronizarMedicos()">Sincronizar médicos</button>
+    <div class="stat-box">
+        <span class="stat-label">Médicos</span>
+        <strong id="totalMedicos">0</strong>
+    </div>
+    <div class="stat-box">
+        <span class="stat-label">Pacientes</span>
+        <strong id="totalPacientes">0</strong>
     </div>
 </div>
 
-<div class="table-responsive bg-dark p-3 rounded shadow mb-4">
-    <table class="table table-dark table-hover mb-0">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>Especialidad</th>
-                <th>Jornada</th>
-                <th>Correo</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody id="tablaMedicos">
-            <tr><td colspan="5" class="text-center py-4 text-light">Cargando médicos...</td></tr>
-        </tbody>
-    </table>
+<div class="panel-card mt-4">
+    <div class="panel-header">
+        <div>
+            <h3>Agenda clínica</h3>
+            <p>Revisa la programación diaria y cambia el estado de cada cita.</p>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-modern">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Médico</th>
+                    <th>Paciente</th>
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="tablaCitas">
+                <tr><td colspan="7" class="text-center py-4 text-muted">Cargando citas...</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="panel-card mt-4">
+    <div class="panel-header">
+        <div>
+            <h3>Médicos registrados</h3>
+            <p>Crea, edita y sincroniza médicos del sistema.</p>
+        </div>
+        <div class="button-group">
+            <button class="btn btn-success" onclick="abrirModalMedico()">Nuevo médico</button>
+            <button class="btn btn-secondary" onclick="sincronizarMedicos()">Sincronizar</button>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-modern">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Especialidad</th>
+                    <th>Jornada</th>
+                    <th>Correo</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="tablaMedicos">
+                <tr><td colspan="6" class="text-center py-4 text-muted">Cargando médicos...</td></tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <div id="modalMedico" class="modal-overlay d-none">

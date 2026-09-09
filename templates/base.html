@@ -3,36 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sistema de gestión médica para administración, médicos y pacientes.">
     <title>{% block title %}Sistema Médico{% endblock %}</title>
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Estilos personalizados -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
-        <div class="container d-flex justify-content-between align-items-center">
-            <a class="navbar-brand" href="/">Gestión Médica</a>
+    <div class="page-bg"></div>
+    <nav class="topbar">
+        <div class="container nav-shell">
+            <a class="brand" href="{% if current_user.is_authenticated %}{{ url_for('dashboard') }}{% else %}{{ url_for('index') }}{% endif %}">
+                <span class="brand-mark">+</span>
+                <span>Centro Médico</span>
+            </a>
+
             {% if current_user.is_authenticated %}
-            <div class="d-flex align-items-center gap-3">
-                <a class="nav-link text-light" href="{{ url_for('dashboard') }}">Inicio</a>
-                <a class="nav-link text-light" href="{{ url_for('notificaciones') }}">
-                    Notificaciones{% if notifications_count %} <span class="badge bg-primary">{{ notifications_count }}</span>{% endif %}
+            <div class="nav-actions">
+                <a href="{{ url_for('dashboard') }}" class="nav-link-pill">Inicio</a>
+                <a href="{{ url_for('notificaciones') }}" class="nav-link-pill notification-pill">
+                    Notificaciones
+                    {% if notifications_count %}<span class="notification-badge">{{ notifications_count }}</span>{% endif %}
                 </a>
-                <a class="btn btn-outline-light btn-sm" href="{{ url_for('auth.logout') }}">Salir</a>
+                <a href="{{ url_for('perfil') }}" class="nav-link-pill">Perfil</a>
+                <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Cambiar tema">
+                    <span>🌙</span>
+                    <span>Oscuro</span>
+                </button>
+                <a href="{{ url_for('auth.logout') }}" class="btn-logout">Salir</a>
+            </div>
+            {% else %}
+            <div class="nav-actions">
+                <a href="{{ url_for('index') }}" class="nav-link-pill">Inicio</a>
+                <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Cambiar tema">
+                    <span>🌙</span>
+                    <span>Oscuro</span>
+                </button>
+                <a href="{{ url_for('auth.login') }}" class="btn-primary-soft">Iniciar sesión</a>
             </div>
             {% endif %}
         </div>
     </nav>
 
-    <div class="container">
+    <div class="container app-shell">
         {% block content %}{% endblock %}
     </div>
 
-    <!-- Scripts -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="{{ url_for('static', filename='app.js') }}"></script>
-    <script>lucide.createIcons();</script>
+    <script>if (window.lucide) lucide.createIcons();</script>
     {% block scripts %}{% endblock %}
 </body>
 </html>

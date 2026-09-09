@@ -1,7 +1,34 @@
+function applyTheme(theme) {
+    document.body.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+
+    const toggle = document.getElementById('theme-toggle');
+    if (toggle) {
+        const isDark = theme === 'dark';
+        toggle.setAttribute('aria-label', isDark ? 'Activar modo claro' : 'Activar modo oscuro');
+        toggle.innerHTML = isDark
+            ? '<span>☀️</span><span>Claro</span>'
+            : '<span>🌙</span><span>Oscuro</span>';
+    }
+}
+
 // Configuración global de la aplicación
 document.addEventListener('DOMContentLoaded', () => {
     console.log("Sistema cargado exitosamente.");
-    
+
+    const savedTheme = localStorage.getItem('theme');
+    const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const initialTheme = savedTheme || (systemDark ? 'dark' : 'light');
+    applyTheme(initialTheme);
+
+    const toggle = document.getElementById('theme-toggle');
+    if (toggle) {
+        toggle.addEventListener('click', () => {
+            const nextTheme = document.body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            applyTheme(nextTheme);
+        });
+    }
+
     // Inicializar iconos de Lucide en toda la página
     if (window.lucide) {
         lucide.createIcons();

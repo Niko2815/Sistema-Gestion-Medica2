@@ -2,42 +2,34 @@
 {% block title %}Inicio Médico{% endblock %}
 
 {% block content %}
-<div class="row">
-    <div class="col-12 mb-4">
-        <h1 class="fw-bold">Bienvenido, doctor</h1>
-        <p class="text-muted">Gestiona tus citas y tu disponibilidad.</p>
-    </div>
-
-    <div class="col-md-4 mb-4">
-        <div class="login-card h-100 text-center hover-effect">
-            <i data-lucide="calendar" class="text-primary mb-3 mx-auto" style="width: 48px; height: 48px;"></i>
-            <h3>Mis Citas</h3>
-            <p class="small text-muted">Revisa las citas asignadas y administra tu agenda.</p>
-            <a href="{{ url_for('medico.citas') }}" class="btn btn-outline-primary w-100 mt-2">Ver Citas</a>
-        </div>
-    </div>
-
-    <div class="col-md-4 mb-4">
-        <div class="login-card h-100 text-center hover-effect">
-            <i data-lucide="clock" class="text-success mb-3 mx-auto" style="width: 48px; height: 48px;"></i>
-            <h3>Disponibilidad</h3>
-            <p class="small text-muted">Define franjas horarias para que los pacientes reserven contigo.</p>
-            <a href="{{ url_for('medico.disponibilidad') }}" class="btn btn-outline-success w-100 mt-2">Administrar Horarios</a>
-        </div>
-    </div>
-
-    <div class="col-md-4 mb-4">
-        <div class="login-card h-100 text-center hover-effect">
-            <i data-lucide="user" class="text-info mb-3 mx-auto" style="width: 48px; height: 48px;"></i>
-            <h3>Mi Perfil</h3>
-            <p class="small text-muted">Actualiza tus datos profesionales y de contacto.</p>
-            <a href="{{ url_for('perfil') }}" class="btn btn-outline-info w-100 mt-2">Ver Perfil</a>
-        </div>
+<div class="page-header">
+    <div>
+        <span class="eyebrow">Bienvenido, doctor</span>
+        <h1>Panel del médico</h1>
+        <p>Revisa tu agenda, disponibilidad y atención diaria.</p>
     </div>
 </div>
 
-<style>
-.hover-effect { transition: transform 0.2s; cursor: pointer; }
-.hover-effect:hover { transform: translateY(-5px); border-color: var(--primary-blue); }
-</style>
+<div class="cards-grid three-col">
+    <article class="mini-card">
+        <div class="card-icon blue"><i data-lucide="calendar"></i></div>
+        <h3>Mis citas</h3>
+        <p>Consulta citas de pacientes, fechas y estados en un solo lugar.</p>
+        <a href="{{ url_for('medico.citas') }}" class="btn btn-primary-soft">Ver agenda</a>
+    </article>
+
+    <article class="mini-card">
+        <div class="card-icon green"><i data-lucide="clock-3"></i></div>
+        <h3>Disponibilidad</h3>
+        <p>Configura franjas y horarios para que el paciente reserve correctamente.</p>
+        <a href="{{ url_for('medico.disponibilidad') }}" class="btn btn-primary-soft">Administrar</a>
+    </article>
+
+    <article class="mini-card">
+        <div class="card-icon violet"><i data-lucide="user-round"></i></div>
+        <h3>Mi perfil</h3>
+        <p>Consulta tu información profesional y tus datos de contacto.</p>
+        <a href="{{ url_for('perfil') }}" class="btn btn-primary-soft">Ver perfil</a>
+    </article>
+</div>
 {% endblock %}

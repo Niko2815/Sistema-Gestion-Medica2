@@ -2,34 +2,33 @@
 {% block title %}Notificaciones{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center mt-4">
-    <div class="col-lg-8">
-        <div class="card p-4 bg-dark text-light">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <div>
-                    <h1 class="fw-bold">Notificaciones</h1>
-                    <p class="text-muted">Revisa las últimas alertas de tu cuenta.</p>
-                </div>
-                <a href="{{ url_for('dashboard') }}" class="btn btn-secondary btn-sm">Volver</a>
-            </div>
-
-            {% if notificaciones %}
-            <ul class="list-group list-group-flush">
-                {% for notificacion in notificaciones %}
-                <li class="list-group-item bg-secondary text-light">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <span>{{ notificacion.mensaje }}</span>
-                        <small class="text-muted">{{ notificacion.creado.strftime('%Y-%m-%d %H:%M') }}</small>
-                    </div>
-                </li>
-                {% endfor %}
-            </ul>
-            {% else %}
-            <div class="text-center py-5 text-light">
-                <p class="mb-0">No hay notificaciones nuevas.</p>
-            </div>
-            {% endif %}
-        </div>
+<div class="page-header">
+    <div>
+        <span class="eyebrow">Alertas</span>
+        <h1>Notificaciones</h1>
+        <p>Consulta los avisos y cambios relevantes de tu cuenta.</p>
     </div>
+    <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Volver</a>
+</div>
+
+<div class="panel-card">
+    {% if notificaciones %}
+    <div class="notification-list">
+        {% for notificacion in notificaciones %}
+        <div class="notification-item">
+            <div class="notification-dot"></div>
+            <div class="notification-body">
+                <p>{{ notificacion.mensaje }}</p>
+                <small>{{ notificacion.creado.strftime('%Y-%m-%d %H:%M') }}</small>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <i data-lucide="bell-off"></i>
+        <p>No hay notificaciones nuevas.</p>
+    </div>
+    {% endif %}
 </div>
 {% endblock %}

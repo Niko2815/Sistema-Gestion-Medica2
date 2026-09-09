@@ -1,46 +1,51 @@
 {% extends "base.html" %}
-{% block title %}Registro{% endblock %}
+{% block title %}Registro de paciente{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center mt-5">
-    <div class="col-md-6">
-        <div class="login-card">
-            <div class="text-center mb-4">
-                <i data-lucide="user-plus" class="text-primary mb-2" style="width: 48px; height: 48px;"></i>
-                <h2 class="fw-bold">Registro de paciente</h2>
-                <p class="text-muted">Crea tu cuenta y accede al panel de paciente.</p>
+<div class="auth-shell">
+    <div class="auth-card glow-card wide-card">
+        <div class="auth-header text-center">
+            <div class="icon-wrap icon-secondary">
+                <i data-lucide="user-plus"></i>
             </div>
+            <span class="eyebrow text-center">Registro del paciente</span>
+            <h2>Crear tu cuenta</h2>
+            <p>Completa tus datos para comenzar a reservar citas.</p>
+        </div>
 
-            {% if error %}
-            <div class="alert alert-danger">{{ error }}</div>
-            {% endif %}
+        {% if error %}
+        <div class="alert alert-danger">{{ error }}</div>
+        {% endif %}
 
-            <form method="POST" action="{{ url_for('auth.register') }}">
-                <div class="mb-3">
-                    <label class="form-label">Nombre completo</label>
-                    <input type="text" name="nombre" class="form-control" required>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Correo electrónico</label>
-                    <input type="email" name="correo" class="form-control" required>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Contraseña</label>
-                    <input type="password" name="password" class="form-control" required>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Documento</label>
-                    <input type="text" name="documento" class="form-control" required>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Teléfono</label>
-                    <input type="text" name="telefono" class="form-control">
-                </div>
-                <button type="submit" class="btn btn-primary w-100 mt-3">Registrar cuenta</button>
-            </form>
-            <div class="text-center mt-4">
-                <small class="text-muted">¿Ya tienes cuenta? <a href="{{ url_for('auth.login') }}" class="text-info text-decoration-none">Inicia sesión</a></small>
+        <form method="POST" action="{{ url_for('auth.register') }}" class="auth-form row g-3">
+            <div class="col-md-6 field-group">
+                <label>Nombre completo</label>
+                <input type="text" name="nombre" required>
             </div>
+            <div class="col-md-6 field-group">
+                <label>Correo electrónico</label>
+                <input type="email" name="correo" required>
+            </div>
+            <div class="col-md-6 field-group">
+                <label>Contraseña</label>
+                <input type="password" name="password" required>
+            </div>
+            <div class="col-md-6 field-group">
+                <label>Documento</label>
+                <input type="text" name="documento" required>
+            </div>
+            <div class="col-12 field-group">
+                <label>Teléfono</label>
+                <input type="text" name="telefono">
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary w-100">Registrar cuenta</button>
+            </div>
+        </form>
+
+        <div class="auth-footer">
+            <span>¿Ya tienes cuenta?</span>
+            <a href="{{ url_for('auth.login') }}">Inicia sesión</a>
         </div>
     </div>
 </div>
