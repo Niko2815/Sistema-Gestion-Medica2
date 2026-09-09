@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mockups y Wireframes - Sistema de Gestión Médica</title>
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --panel: #ffffff;
+      --ink: #1e2a3a;
+      --muted: #6b7a90;
+      --line: #dfe7f3;
+      --primary: #2f6fed;
+      --primary-soft: #eaf1ff;
+      --success: #29b56d;
+      --warning: #f4b740;
+      --shadow: 0 12px 28px rgba(18, 28, 45, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+    }
+
+    .container {
+      width: min(1200px, calc(100% - 32px));
+      margin: 32px auto;
+    }
+
+    h1, h2 {
+      margin: 0 0 12px;
+    }
+
+    .section {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    .wireframe {
+      background: #fafcff;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 18px;
+      margin-top: 12px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #eef4ff;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin-bottom: 16px;
+    }
+
+    .nav {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .pill {
+      background: #edf3ff;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 7px 12px;
+      color: var(--ink);
+      font-size: 12px;
+    }
+
+    .main {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 18px;
+      margin-top: 14px;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #fff;
+      min-height: 120px;
+      padding: 12px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #eef4ff, #f6f8ff);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 22px;
+      min-height: 180px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .cta {
+      display: inline-block;
+      background: var(--primary);
+      color: white;
+      border-radius: 10px;
+      padding: 12px 18px;
+      font-weight: 700;
+      margin-top: 12px;
+      width: fit-content;
+    }
+
+    .form {
+      display: grid;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .field {
+      display: grid;
+      gap: 6px;
+    }
+
+    .input {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #f9fbff;
+      height: 38px;
+      padding: 8px 10px;
+      color: var(--muted);
+    }
+
+    .button {
+      background: var(--primary);
+      color: white;
+      border-radius: 10px;
+      border: none;
+      padding: 12px 16px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .kpis {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(120px, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .kpi {
+      background: var(--primary-soft);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      min-height: 90px;
+      padding: 12px;
+    }
+
+    .table {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-top: 12px;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1.3fr 1.2fr 0.8fr 0.8fr;
+      border-bottom: 1px solid var(--line);
+      padding: 10px 12px;
+      background: white;
+    }
+
+    .row.header {
+      background: #f3f7ff;
+      font-weight: 700;
+    }
+
+    .timeline {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .chip {
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: #f8fafc;
+      font-size: 12px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 5px 8px;
+      border-radius: 999px;
+      background: #e9f9f0;
+      color: #1f8c4b;
+      border: 1px solid #bfead0;
+      font-size: 12px;
+    }
+
+    @media (max-width: 800px) {
+      .main { grid-template-columns: 1fr; }
+      .kpis { grid-template-columns: 1fr; }
+      .row { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Mockups y Wireframes</h1>
+    <h2>Sistema de Gestión Médica</h2>
+
+    <section class="section">
+      <h2>1. Lobby / Inicio</h2>
+      <div class="wireframe">
+        <div class="topbar">
+          <strong>Sistema Hospitalario</strong>
+          <div class="nav">
+            <span class="pill">Login</span>
+            <span class="pill">Registro</span>
+          </div>
+        </div>
+        <div class="hero">
+          <h3>Tu salud, organizada y siempre al alcance</h3>
+          <div class="cta">Iniciar sesión</div>
+          <div class="cta" style="background:#eaf1ff;color:var(--ink);margin-top:8px;">Crear cuenta</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>2. Login</h2>
+      <div class="wireframe">
+        <div class="panel" style="max-width:420px;margin:0 auto; padding:20px;">
+          <h3 style="text-align:center;">Iniciar sesión</h3>
+          <div class="form">
+            <div class="field">
+              <label>Correo electrónico</label>
+              <div class="input">correo@hospital.com</div>
+            </div>
+            <div class="field">
+              <label>Contraseña</label>
+              <div class="input">••••••••</div>
+            </div>
+            <button class="button">Ingresar</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>3. Registro de paciente</h2>
+      <div class="wireframe">
+        <div class="panel" style="max-width:520px;margin:0 auto; padding:20px;">
+          <h3>Crear cuenta</h3>
+          <div class="form">
+            <div class="field"><label>Nombre</label><div class="input">María García</div></div>
+            <div class="field"><label>Documento</label><div class="input">3333333333</div></div>
+            <div class="field"><label>Teléfono</label><div class="input">3003456789</div></div>
+            <div class="field"><label>Correo</label><div class="input">paciente@hospital.com</div></div>
+            <div class="field"><label>Contraseña</label><div class="input">••••••••</div></div>
+            <button class="button">Registrarme</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>4. Dashboard de administrador</h2>
+      <div class="wireframe">
+        <div class="topbar">
+          <strong>ADMIN</strong>
+          <div class="nav">
+            <span class="pill">Dashboard</span>
+            <span class="pill">Médicos</span>
+            <span class="pill">Pacientes</span>
+            <span class="pill">Citas</span>
+          </div>
+        </div>
+        <div class="kpis">
+          <div class="kpi"><strong>Total médicos</strong><br />12</div>
+          <div class="kpi"><strong>Total pacientes</strong><br />340</div>
+          <div class="kpi"><strong>Citas del día</strong><br />24</div>
+        </div>
+        <div class="table">
+          <div class="row header">
+            <div>Nombre</div>
+            <div>Especialidad</div>
+            <div>Estado</div>
+            <div>Acción</div>
+          </div>
+          <div class="row">
+            <div>Dr. Carlos Mendez</div>
+            <div>Medicina General</div>
+            <div><span class="badge">Activo</span></div>
+            <div>Editar</div>
+          </div>
+          <div class="row">
+            <div>Dr. Ana López</div>
+            <div>Pediatría</div>
+            <div><span class="badge">Activo</span></div>
+            <div>Editar</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>5. Dashboard del médico</h2>
+      <div class="wireframe">
+        <div class="topbar">
+          <strong>Médico</strong>
+          <div class="nav">
+            <span class="pill">Inicio</span>
+            <span class="pill">Horarios</span>
+            <span class="pill">Citas</span>
+            <span class="pill">Perfil</span>
+          </div>
+        </div>
+        <div class="kpis">
+          <div class="kpi"><strong>Citas hoy</strong><br />8</div>
+          <div class="kpi"><strong>Disponibilidad</strong><br />78%</div>
+          <div class="kpi"><strong>Pacientes</strong><br />32</div>
+        </div>
+        <div class="timeline">
+          <span class="chip">L</span>
+          <span class="chip">M</span>
+          <span class="chip">M</span>
+          <span class="chip">J</span>
+          <span class="chip">V</span>
+          <span class="chip">S</span>
+          <span class="chip">D</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>6. Dashboard del paciente</h2>
+      <div class="wireframe">
+        <div class="topbar">
+          <strong>Paciente</strong>
+          <div class="nav">
+            <span class="pill">Inicio</span>
+            <span class="pill">Mis citas</span>
+            <span class="pill">Reservar</span>
+            <span class="pill">Historial</span>
+          </div>
+        </div>
+        <div class="main">
+          <div class="panel">
+            <h3>Bienvenido, María</h3>
+            <div class="cta">Reservar cita</div>
+            <div class="cta" style="background:#eaf1ff;color:var(--ink);margin-top:8px;">Ver historial</div>
+          </div>
+          <div class="panel">
+            <h3>Próxima cita</h3>
+            <p>Dr. Carlos Mendez</p>
+            <p>15 Sept - 10:30</p>
+            <span class="badge">Confirmada</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</body>
+</html>

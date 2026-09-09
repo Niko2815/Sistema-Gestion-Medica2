@@ -232,11 +232,22 @@ async function cargarDatosIniciales() {
     await cargarCitas();
 }
 
+function actualizarTotales() {
+    const totalCitas = Array.isArray(citasAdmin) ? citasAdmin.length : 0;
+    const totalMedicos = Array.isArray(medicosData) ? medicosData.length : 0;
+    const totalPacientes = Array.isArray(window.pacientesAdmin) ? window.pacientesAdmin.length : 0;
+
+    document.getElementById('totalCitas').textContent = totalCitas;
+    document.getElementById('totalMedicos').textContent = totalMedicos;
+    document.getElementById('totalPacientes').textContent = totalPacientes;
+}
+
 async function cargarCitas() {
     try {
         const res = await fetch('/admin/api/citas');
         citasAdmin = await res.json();
         render(citasAdmin);
+        actualizarTotales();
     } catch (e) {
         console.error('Error al cargar citas admin', e);
         document.getElementById('tablaCitas').innerHTML = '<tr><td colspan="7" class="text-center py-4 text-danger">No se pudo cargar las citas.</td></tr>';
@@ -289,6 +300,7 @@ async function cargarMedicos() {
         medicosData = medicos;
         document.getElementById('medicoSelect').innerHTML = medicos.map(m => `<option value="${m.id}">${m.nombre} (${m.especialidad})</option>`).join('');
         renderMedicos(medicos);
+        actualizarTotales();
     } catch (e) {
         console.error('Error cargando médicos', e);
     }
@@ -359,7 +371,9 @@ async function cargarPacientes() {
     try {
         const res = await fetch('/admin/api/pacientes');
         const pacientes = await res.json();
+        window.pacientesAdmin = pacientes;
         document.getElementById('pacienteSelect').innerHTML = pacientes.map(p => `<option value="${p.id}">${p.nombre} (${p.documento})</option>`).join('');
+        actualizarTotales();
     } catch (e) {
         console.error('Error cargando pacientes', e);
     }

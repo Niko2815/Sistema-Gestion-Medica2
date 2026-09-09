@@ -46,9 +46,6 @@ def create_app():
         from database.models.medico import Medico
         from database.models.paciente import Paciente
 
-        if User.query.first():
-            return
-
         usuarios = [
             ('Administrador', 'admin@hospital.com', 'admin123', 'admin'),
             ('Dr. Carlos Mendez', 'doctor@hospital.com', 'doctor123', 'medico'),
@@ -56,9 +53,29 @@ def create_app():
         ]
 
         for nombre, correo, password, role in usuarios:
-            usuario = User(nombre=nombre, correo=correo, role=role)
-            usuario.set_password(password)
-            db.session.add(usuario)
+            existente = User.query.filter_by(correo=correo).first()
+            if not existente:
+                usuario = User(nombre=nombre, correo=correo, role=role)
+                usuario.set_password(password)
+                db.session.add(usuario)
+
+            paciente = Paciente.query.filter_by(correo=correo).first()
+            if not paciente:
+                paciente = Paciente(
+                    nombre=nombre,
+                    documento=f"{role[:3].upper()}{len(correo)}",
+                    telefono='3000000000',
+                    correo=correo,
+                    role=role,
+                )
+                paciente.set_password(password)
+                db.session.add(paciente)
+            else:
+                paciente.role = role
+                if not paciente.password:
+                    paciente.set_password(password)
+                elif not paciente.check_password(password):
+                    paciente.set_password(password)
 
         db.session.commit()
 
@@ -71,15 +88,6 @@ def create_app():
                         jornada='Diurna',
                         correo=correo,
                     ))
-            elif role == 'paciente':
-                if not Paciente.query.filter_by(correo=correo).first():
-                    db.session.add(Paciente(
-                        nombre=nombre,
-                        documento='12345678',
-                        telefono='3000000000',
-                        correo=correo,
-                    ))
-
         db.session.commit()
 
     @app.route('/')
